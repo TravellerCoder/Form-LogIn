@@ -7,25 +7,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const emailError = document.getElementById('errorEmail');
     const passwordError = document.getElementById('errorPassword');
     const confirmPasswordError = document.getElementById('errorConfirmPassword');
+    const showHideButton = document.getElementById('show-hide');
 
     logInForm.addEventListener('submit', function(event){
         event.preventDefault();
         validateForm()
-    })
+    });
 
     emailInput.addEventListener('blur', function(){
         validateEmail()
-    })
+    });
 
     emailInput.addEventListener('change', function(){
         clearError(emailError)
-    })
+    });
 
     passwordInput.addEventListener('change', function(){
         clearError(passwordError)
-    })
+    });
     confirmPasswordInput.addEventListener('change', function(){
         clearError(confirmPasswordError)
+    });
+    showHideButton.addEventListener('click', function(){
+        if(passwordInput.type == 'password'){
+            passwordInput.type = 'text'
+            confirmPasswordInput.type = 'text'
+        } else {
+            passwordInput.type = 'password'
+            confirmPasswordInput.type = 'password'
+        }
     })
 
     function validateForm(){
@@ -34,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const passwordMatch = validatePasswordMatch();
 
         if(validEmail && validPassword && passwordMatch){
-            //todo: guardar mail en local storage y generr un json en consola 
+            saveToLocalStorage()
             alert('Has ingresado con exito, BIENVENIDO AL SITIO')
         }
     };
@@ -80,6 +90,21 @@ document.addEventListener('DOMContentLoaded', function() {
             errorElement.innerHTML = ''
             errorElement.style.display='none'
         };
+
+        function saveToLocalStorage(){
+            const emailValue = emailInput.value.trim();
+            localStorage.setItem('email', emailValue);
+            const body = bodyBuilderJSON();
+            console.log(body);
+            
+        }
+
+        function bodyBuilderJSON(){
+            return {
+                'email' : emailInput.value,
+                'password' : passwordInput.value,
+            }
+        }
     })
 
 
